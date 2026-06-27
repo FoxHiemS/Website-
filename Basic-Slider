@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliders Are Everywhere</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #2c3e50, #1a1a2e);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* ★ Header artık slider'ın sol kenarına sabit hizalı */
+        .header {
+            margin-bottom: 10px;
+            margin-left: calc((100% - 70%)/2); /* slider container ortalaması + slayt margin-left */
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .slider-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            touch-action: pan-y;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+            padding: 20px 0;
+        }
+
+        .slide {
+            flex: 0 0 70%;
+            min-width: 70%;
+            height: 650px;
+            margin: 0 15px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            background: #1a73e8;
+            transition: all 0.8s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        .slide:hover {
+            cursor: grab;
+        }
+
+        .slide:active {
+            cursor: grabbing;
+        }
+
+        .slide-text {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 40px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.8s ease;
+        }
+
+        .slide.active .slide-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-number {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .slide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-description {
+            font-size: 16px;
+            line-height: 1.5;
+            max-width: 85%;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+            gap: 10px;
+            padding: 20px;
+            width: 175px;
+            border-radius: 50px;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.8s ease;
+        }
+
+        .dot.active {
+            background: #fff;
+            transform: scale(1.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+
+        @media (max-width: 1024px) {
+            .header {
+                margin-left: calc((100% - 75%)/2);
+            }
+            .slide {
+                flex: 0 0 75%;
+                min-width: 75%;
+                height: 450px;
+            }
+            .slide-text {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                margin-left: calc((100% - 85%)/2);
+            }
+            .slide {
+                flex: 0 0 85%;
+                min-width: 85%;
+                height: 400px;
+                padding: 20px;
+            }
+            
+            .slide-title {
+                font-size: 22px;
+            }
+            .slide-text {
+                font-size: 26px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                margin-left: 10px; /* mobile’de zaten slide kenara çok yakın, margin-left 0 veya 10px uygun */
+            }
+            .slider-container {
+                overflow: hidden;
+            }
+            
+            .slider {
+                padding: 20px 0;
+            }
+            
+            .slide {
+                flex: 0 0 calc(100% - 20px);
+                min-width: calc(100% - 20px);
+                height: 350px;
+                padding: 15px;
+                margin: 0 10px;
+            }
+            
+            .slide-title {
+                font-size: 20px;
+            }
+            
+            .slide-description {
+                font-size: 14px;
+            }
+            .slide-text {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sliders Are Everywhere.</h1>
+    </div>
+    
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide">
+                <div class="slide-text">slides are everywhere</div>
+                <div class="slide-number">1 / 6</div>
+                <h2 class="slide-title">Öne Çıkan Ürün</h2>
+                <p class="slide-description">Yeni nesil teknoloji ile üretilmiş, şık tasarım ve yüksek performansın birleşimi.</p>
+            </div>
+            <div class="slide">
+                <div class="slide-text">slides are everywhere</div>
+                <div class="slide-number">2 / 6</div>
+                <h2 class="slide-title">Akıllı Çözümler</h2>
+                <p class="slide-description">Günlük yaşamınışınızı kolaylaştıran yenilikçi özellikler ve kullanıcı dostu arayüz.</p>
+            </div>
+            <div class="slide">
+                <div class="slide-text">slides are everywhere</div>
+                <div class="slide-number">3 / 6</div>
+                <h2 class="slide-title">Premium Kalite</h2>
+                <p class="slide-description">En kaliteli malzemelerle üretilmiş, dayanıklı and uzun ömürlü tasarım.</p>
+            </div>
+            <div class="slide">
+                <div class="slide-text">slides are everywhere</div>
+                <div class="slide-number">4 / 6</div>
+                <h2 class="slide-title">Sürdürülebilirlik</h2>
+                <p class="slide-description">Çevre dostu malzemeler ve enerji verimliliği ile geleceğe katkı sağlayın.</p>
+            </div>
+            <div class="slide">
+                <div class="slide-text">slides are everywhere</div>
+                <div class="slide-number">5 / 6</div>
+                <h2 class="slide-title">Kusursuz Tasarım</h2>
+                <p class="slide-description">Şık, minimalist tasarımı ile her ortamda dikkat çeken bir görünüm.</p>
+            </div>
+            <div class="slide">
+                <div class="slide-text">slides are everywhere</div>
+                <div class="slide-number">6 / 6</div>
+                <h2 class="slide-title">Sınırsız Olanaklar</h2>
+                <p class="slide-description">Genı şuyumluluk ve çok yönlü işlevsellik ile ihtiyaçlarınıza cevap verir.</p>
+            </div>
+        </div>
+        
+        <div class="slider-dots">
+            <div class="dot active" data-index="0"></div>
+            <div class="dot" data-index="1"></div>
+            <div class="dot" data-index="2"></div>
+            <div class="dot" data-index="3"></div>
+            <div class="dot" data-index="4"></div>
+            <div class="dot" data-index="5"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.querySelector('.slider');
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            const sliderContainer = document.querySelector('.slider-container');
+            
+            let currentIndex = 0;
+            let slideWidth;
+            let isAnimating = false;
+            let autoSlideInterval;
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            
+            function initSlider() {
+                calculateSlideWidth();
+                updateSlider();
+                startAutoSlide();
+                initTouchEvents();
+            }
+            
+            function initTouchEvents() {
+                sliderContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+                sliderContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+                sliderContainer.addEventListener('touchend', handleTouchEnd);
+                sliderContainer.addEventListener('mousedown', handleMouseDown);
+                sliderContainer.addEventListener('mousemove', handleMouseMove);
+                sliderContainer.addEventListener('mouseup', handleMouseUp);
+                sliderContainer.addEventListener('mouseleave', handleMouseUp);
+                
+                sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+                sliderContainer.addEventListener('mouseleave', startAutoSlide);
+            }
+            
+            function handleTouchStart(e) {
+                stopAutoSlide();
+                startX = e.touches[0].clientX;
+                currentX = startX;
+                isDragging = true;
+                slider.style.transition = 'none';
+            }
+            
+            function handleTouchMove(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                currentX = e.touches[0].clientX;
+                const diff = currentX - startX;
+                calculateSlideWidth();
+                const containerWidth = sliderContainer.offsetWidth;
+                const offset = (containerWidth - slideWidth) / 2 - (currentIndex * slideWidth) + diff;
+                slider.style.transform = `translateX(${offset}px)`;
+            }
+            
+            function handleTouchEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                slider.style.transition = 'transform 0.3s ease';
+                const diff = currentX - startX;
+                const threshold = slideWidth * 0.2;
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) prevSlide();
+                    else nextSlide();
+                } else updateSlider();
+                startAutoSlide();
+            }
+            
+            function handleMouseDown(e) {
+                stopAutoSlide();
+                startX = e.clientX;
+                currentX = startX;
+                isDragging = true;
+                slider.style.transition = 'none';
+                sliderContainer.style.cursor = 'grabbing';
+            }
+            
+            function handleMouseMove(e) {
+                if (!isDragging) return;
+                currentX = e.clientX;
+                const diff = currentX - startX;
+                calculateSlideWidth();
+                const containerWidth = sliderContainer.offsetWidth;
+                const offset = (containerWidth - slideWidth) / 2 - (currentIndex * slideWidth) + diff;
+                slider.style.transform = `translateX(${offset}px)`;
+            }
+            
+            function handleMouseUp() {
+                if (!isDragging) return;
+                isDragging = false;
+                slider.style.transition = 'transform 0.3s ease';
+                sliderContainer.style.cursor = 'grab';
+                const diff = currentX - startX;
+                const threshold = slideWidth * 0.2;
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) prevSlide();
+                    else nextSlide();
+                } else updateSlider();
+                startAutoSlide();
+            }
+            
+            function calculateSlideWidth() {
+                const slideStyle = window.getComputedStyle(slides[0]);
+                const slideWidthValue = slides[0].offsetWidth;
+                const marginLeft = parseFloat(slideStyle.marginLeft);
+                const marginRight = parseFloat(slideStyle.marginRight);
+                slideWidth = slideWidthValue + marginLeft + marginRight;
+            }
+            
+            function nextSlide() {
+                if (isAnimating) return;
+                isAnimating = true;
+                currentIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+                updateSlider();
+                setTimeout(() => { isAnimating = false; }, 300);
+            }
+            
+            function prevSlide() {
+                if (isAnimating) return;
+                isAnimating = true;
+                currentIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+                updateSlider();
+                setTimeout(() => { isAnimating = false; }, 300);
+            }
+            
+            function goToSlide(index) {
+                if (isAnimating) return;
+                isAnimating = true;
+                currentIndex = index;
+                updateSlider();
+                setTimeout(() => { isAnimating = false; }, 300);
+            }
+            
+            function updateSlider() {
+                calculateSlideWidth();
+                const containerWidth = sliderContainer.offsetWidth;
+                const offset = (containerWidth - slideWidth) / 2 - (currentIndex * slideWidth);
+                slider.style.transform = `translateX(${offset}px)`;
+                
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === currentIndex);
+                });
+                
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            function startAutoSlide() {
+                clearInterval(autoSlideInterval);
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            }
+            
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+            
+            slides.forEach((slide) => {
+                slide.addEventListener('click', (e) => {
+                    if (isAnimating || isDragging) return;
+                    const clickedIndex = Array.from(slides).indexOf(e.target.closest('.slide'));
+                    if (clickedIndex !== currentIndex) goToSlide(clickedIndex);
+                });
+            });
+            
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    if (isAnimating || isDragging) return;
+                    goToSlide(parseInt(this.getAttribute('data-index')));
+                });
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') nextSlide();
+                else if (e.key === 'ArrowLeft') prevSlide();
+            });
+            
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(initSlider, 250);
+            });
+            
+            initSlider();
+        });
+    </script>
+</body>
+</html>
