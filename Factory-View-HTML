@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top-Down Factories</title>
+<style>
+  :root {
+    --bg: #111;
+    --road: #2a2a2a;
+    --hall: #333;
+    --roof-dark: #222;
+    --roof-light: #444;
+    --chimney: #555;
+    --dock: #666;
+  }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body { background: var(--bg); width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; }
+  .container { position:relative; width:100%; height:100%; }
+
+  /* Roads */
+  .road-horizontal { position:absolute; top:calc(50% - 75px); left:0; width:100%; height:150px; background:var(--road);}
+  .road-vertical { position:absolute; top:0; left:calc(50% - 75px); width:150px; height:100%; background:var(--road);}
+
+  /* Common Factory Styles */
+  .factory { position:absolute; background:var(--hall); border-radius:4px; }
+
+  /* Chimney */
+  .chimney { position:absolute; background:var(--chimney); border-radius:2px; }
+
+  /* Loading Dock */
+  .dock { position:absolute; background:var(--dock); border-radius:2px; }
+
+  /* Top-left factory */
+  .tl { top:5%; left:5%; width:35%; height:35%; }
+  .tl .main { width:100%; height:60%; background:var(--roof-dark); border-radius:4px; position:relative; }
+  .tl .ext { width:40%; height:35%; background:var(--roof-light); border-radius:4px; position:absolute; bottom:0; left:0; }
+  .tl .chimney { width:6%; height:12%; top:10%; right:10%; position:absolute; }
+  .tl .dock { width:15%; height:8%; bottom:0; right:10%; position:absolute; }
+
+  /* Top-right factory */
+  .tr { top:5%; right:5%; width:35%; height:35%; }
+  .tr .main { width:100%; height:65%; background:var(--roof-dark); border-radius:4px; position:relative; }
+  .tr .ext-left { width:25%; height:30%; background:var(--roof-light); position:absolute; bottom:0; left:0; border-radius:4px; }
+  .tr .ext-right { width:25%; height:30%; background:var(--roof-light); position:absolute; bottom:0; right:0; border-radius:4px; }
+  .tr .chimney { width:6%; height:12%; top:10%; left:45%; position:absolute; }
+  .tr .dock { width:15%; height:8%; bottom:0; left:40%; position:absolute; }
+
+  /* Bottom-left factory */
+  .bl { bottom:5%; left:5%; width:35%; height:35%; }
+  .bl .main { width:85%; height:65%; background:var(--roof-dark); border-radius:4px; position:relative; }
+  .bl .ext { width:50%; height:30%; background:var(--roof-light); position:absolute; bottom:0; right:0; border-radius:4px; }
+  .bl .chimney { width:6%; height:12%; top:10%; left:10%; position:absolute; }
+  .bl .dock { width:12%; height:6%; bottom:0; left:10%; position:absolute; }
+
+  /* Bottom-right factory */
+  .br { bottom:5%; right:5%; width:35%; height:35%; position:relative; }
+  .br .center { position:absolute; top:20%; left:15%; width:70%; height:55%; background:var(--roof-dark); border-radius:4px; }
+  .br .unit1 { position:absolute; top:5%; left:5%; width:20%; height:20%; background:var(--roof-light); border-radius:3px; }
+  .br .unit2 { position:absolute; top:5%; right:5%; width:20%; height:20%; background:var(--roof-light); border-radius:3px; }
+  .br .unit3 { position:absolute; bottom:5%; left:5%; width:20%; height:20%; background:var(--roof-light); border-radius:3px; }
+  .br .unit4 { position:absolute; bottom:5%; right:5%; width:20%; height:20%; background:var(--roof-light); border-radius:3px; }
+  .br .chimney { width:6%; height:12%; top:30%; left:45%; position:absolute; }
+  .br .dock { width:12%; height:6%; bottom:5%; left:40%; position:absolute; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="road-horizontal"></div>
+  <div class="road-vertical"></div>
+
+  <!-- Top-left factory -->
+  <div class="factory tl">
+    <div class="main"></div>
+    <div class="ext"></div>
+    <div class="chimney"></div>
+    <div class="dock"></div>
+  </div>
+
+  <!-- Top-right factory -->
+  <div class="factory tr">
+    <div class="main"></div>
+    <div class="ext-left"></div>
+    <div class="ext-right"></div>
+    <div class="chimney"></div>
+    <div class="dock"></div>
+  </div>
+
+  <!-- Bottom-left factory -->
+  <div class="factory bl">
+    <div class="main"></div>
+    <div class="ext"></div>
+    <div class="chimney"></div>
+    <div class="dock"></div>
+  </div>
+
+  <!-- Bottom-right factory -->
+  <div class="factory br">
+    <div class="center"></div>
+    <div class="unit1"></div>
+    <div class="unit2"></div>
+    <div class="unit3"></div>
+    <div class="unit4"></div>
+    <div class="chimney"></div>
+    <div class="dock"></div>
+  </div>
+</div>
+</body>
+</html>
