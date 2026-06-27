@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkımızda - Zaman Çizelgesi</title>
+    <style>
+        body {
+        font-family: 'San Francisco', 'Helvetica Neue', 'Segoe UI', Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.5;
+        }
+
+        .container {
+        padding: 2rem;
+        padding-bottom: 400px;
+        margin: 0 auto;
+        max-width: 800px;
+        overflow: hidden;
+        }
+
+        .top-section {
+        text-align: center;
+        padding: 4rem 0;
+        max-width: 600px;
+        margin: 0 auto;
+        }
+
+        .timeline {
+        position: relative;
+        min-height: 150px;
+        }
+
+        .timeline__line {
+        position: absolute;
+        z-index: 2;
+        left: calc(50% - 1px);
+        width: 2px;
+        top: -50px;
+        bottom: -50px;
+        background-color: #000;
+        display: none;
+        }
+
+        .timeline__line:before,
+        .timeline__line:after {
+        position: absolute;
+        display: block;
+        content: '';
+        height: 1rem;
+        width: 1rem;
+        border-radius: 50%;
+        background-color: #000;
+        left: 50%;
+        transform: translateX(-50%);
+        }
+
+        .timeline__line:after {
+        bottom: 0;
+        }
+
+        .timeline__section {
+        display: flex;
+        opacity: 0;
+        transform: translatex(-100%);
+        transition: 600ms ease;
+        position: relative;
+        z-index: 1;
+        margin: 50px 0;
+        padding: 1rem;
+        border-radius: 1rem;
+        align-items: center;
+        min-height: 300px;
+        }
+
+        .timeline__section:nth-child(odd) {
+        flex-direction: row-reverse;
+        transform: translatex(100%);
+        }
+
+        .timeline__section__bead {
+        position: absolute;
+        display: block;
+        height: 1rem;
+        width: 1rem;
+        border-radius: 50%;
+        background-color: #000;
+        left: 50%;
+        top: 20%;
+        transform: translateX(-50%);
+        }
+
+        .timeline__section__content {
+        width: calc(50% - 2rem);
+        }
+
+        .show-me:nth-child(n) {
+        transform: none;
+        opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+    <div class="top-section">
+        <h1>Animated timeline</h1>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam accusantium cumque quos, aperiam nostrum quod reiciendis illum fugit beatae, nisi, nulla laboriosam! Officia tenetur iusto quis dolorem repudiandae inventore reiciendis.</p>
+    </div>
+
+    <div class="timeline">
+        <div class="timeline__line"></div>
+
+        <div class="timeline__section">
+        <div class="timeline__section__bead"></div>
+        <div class="timeline__section__content">
+            <h2>İnovasyon</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut enim sunt modi qui cum eveniet magni iure laudantium vitae. At corporis sequi porro doloremque obcaecati repudiandae nemo? Delectus, praesentium fuga?</p>
+        </div>
+        </div>
+
+        <div class="timeline__section">
+        <div class="timeline__section__bead"></div>
+        <div class="timeline__section__content">
+            <h2>Güven</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut enim sunt modi qui cum eveniet magni iure laudantium vitae. At corporis sequi porro doloremque obcaecati repudiandae nemo? Delectus, praesentium fuga?</p>
+        </div>
+        </div>
+
+        <div class="timeline__section">
+        <div class="timeline__section__bead"></div>
+        <div class="timeline__section__content">
+            <h2>Müşteri Odaklılık</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut enim sunt modi qui cum eveniet magni iure laudantium vitae. At corporis sequi porro doloremque obcaecati repudiandae nemo? Delectus, praesentium fuga?</p>
+        </div>
+        </div>
+
+        <div class="timeline__section">
+        <div class="timeline__section__bead"></div>
+        <div class="timeline__section__content">
+            <h2>Sürdürülebilirlik</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut enim sunt modi qui cum eveniet magni iure laudantium vitae. At corporis sequi porro doloremque obcaecati repudiandae nemo? Delectus, praesentium fuga?</p>
+        </div>
+        </div>
+
+    </div>
+    </div>
+
+    <script>
+        function qs(selector, all) {
+        if (all === void 0) {
+            all = false;
+        }
+        
+        if (all) {
+            return document.querySelectorAll(selector);
+        } else {
+            return document.querySelector(selector);
+        }
+        }
+
+        var sections = qs(".timeline__section", true);
+        var timeline = qs(".timeline");
+        var line = qs(".timeline__line");
+
+        line.style.bottom = "calc(100% - 20px)";
+        var prevScrollY = window.scrollY;
+        var up, down;
+        var full = false;
+        var set = 0;
+        var targetY = window.innerHeight * 0.8;
+
+        function scrollHandler(e) {
+        var scrollY = window.scrollY;
+
+        up = scrollY < prevScrollY;
+        down = !up;
+
+        var timelineRect = timeline.getBoundingClientRect();
+        var lineRect = line.getBoundingClientRect();
+        // const lineHeight = lineRect.bottom - lineRect.top;
+        var dist = targetY - timelineRect.top;
+
+        console.log(dist);
+
+        if (down && !full) {
+            set = Math.max(set, dist);
+            line.style.bottom = "calc(100% - " + set + "px)";
+        }
+
+        if (dist > timeline.offsetHeight + 50 && !full) {
+            full = true;
+            line.style.bottom = "-50px";
+        }
+
+        sections.forEach(function(item) {
+            // console.log(item);
+            var rect = item.getBoundingClientRect();
+            //     console.log(rect);
+
+            if (rect.top + item.offsetHeight / 5 < targetY) {
+            item.classList.add("show-me");
+            }
+        });
+
+        // console.log(up, down);
+        prevScrollY = window.scrollY;
+        }
+
+        scrollHandler();
+        line.style.display = "block";
+        window.addEventListener("scroll", scrollHandler);
+
+    </script>
+
+</body>
+</html>
