@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yavaş ve Tam Dolu Bar</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 200vh; /* scroll için uzun sayfa */
+    background: #f0f0f0;
+  }
+
+  #progress-wrapper {
+    position: fixed;
+    top: 50vh;
+    left: 0;
+    width: 100vw;
+    height: 111px;
+    overflow: hidden;
+    background: #ddd;
+  }
+
+  #progress-container {
+    width: 3000px;
+    height: 111px;
+    position: relative;
+  }
+
+  #progress-bar {
+    height: 100%;
+    width: 0;
+    background: #4caf50;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  #bar-text {
+    position: relative;
+    margin-left: 20px;
+    font-size: 24px;
+    color: white;
+    z-index: 1;
+    font-weight: bold;
+    line-height: 111px;
+  }
+
+  #bar-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 267px;
+    height: auto;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-wrapper">
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+    <div id="bar-text">BAR BURADA</div>
+    <img id="bar-image" src="int-images/forklift-green.png" alt="Uc Resim">
+  </div>
+</div>
+
+<script>
+  const bar = document.getElementById('progress-bar');
+  const container = document.getElementById('progress-container');
+  const wrapper = document.getElementById('progress-wrapper');
+  const barImage = document.getElementById('bar-image');
+
+  let prevScrollTop = 0;
+  let currentBarWidth = 0;
+
+  function updateBar() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    let scrollPercent = scrollTop / docHeight;
+
+    // scrollPercent 0-1 arasında
+    scrollPercent = Math.min(Math.max(scrollPercent, 0), 1);
+
+    // Barın mevcut genişliğine yumuşak yaklaşım (smoothing)
+    const targetWidth = 3000 * scrollPercent;
+    currentBarWidth += (targetWidth - currentBarWidth) * 0.1; // 0.05 ile yavaşlama
+
+    bar.style.width = `${currentBarWidth}px`;
+
+    // Container kaydırma
+    const overflow = Math.max(0, currentBarWidth - wrapper.clientWidth);
+    container.style.transform = `translateX(-${overflow}px)`;
+
+    // Resmi barın sağ ucuna sabitle
+    barImage.style.left = `${currentBarWidth - barImage.width}px`;
+
+    prevScrollTop = scrollTop;
+    requestAnimationFrame(updateBar);
+  }
+
+  updateBar();
+</script>
+
+</body>
+</html>
